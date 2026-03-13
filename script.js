@@ -42,16 +42,28 @@ document.addEventListener('DOMContentLoaded', () => {
             // Send using emailjs.send
             emailjs.send('service_qf2d3nm', 'template_ctftdb1', templateParams)
                 .then(() => {
-                    alert('Merci ! Votre demande de devis a été envoyée. Nous vous recontacterons sous 24h.');
+                    // Hide form and show success message
+                    contactForm.classList.add('hidden');
+                    const successMessage = document.getElementById('successMessage');
+                    if (successMessage) {
+                        successMessage.classList.remove('hidden');
+                    }
                     contactForm.reset();
                 })
                 .catch((error) => {
                     console.error('EmailJS Error:', error);
-                    alert('Désolé, une erreur est survenue (Error 400). Veuillez vérifier votre Public Key বা সরাসরি কল করুন।');
+                    // Provide a subtle error feedback instead of alert
+                    submitBtn.innerText = 'Erreur lors de l\'envoi';
+                    setTimeout(() => {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                    }, 3000);
                 })
                 .finally(() => {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = originalText;
+                    if (!contactForm.classList.contains('hidden')) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = originalText;
+                    }
                 });
         });
     }
